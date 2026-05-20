@@ -1,0 +1,113 @@
+# mutations.graphql — Example Mutations
+#
+# Paste these into Apollo Sandbox at http://localhost:4000/graphql
+# Run the server first: npm run dev
+#
+# TIP: Run them in order — createUser first, then createPost, etc.
+
+
+# ─── 1. Create a user ─────────────────────────────────────────────────────────
+
+mutation CreateUser {
+  createUser(input: {
+    name: "Zara Khan"
+    email: "zara@example.com"
+  }) {
+    id
+    name
+    email
+    createdAt
+  }
+}
+
+
+# ─── 2. Create a user with variables (better practice) ───────────────────────
+#
+# Variables panel:
+# { "input": { "name": "Omar Farooq", "email": "omar@example.com" } }
+
+mutation CreateUserWithVars($input: CreateUserInput!) {
+  createUser(input: $input) {
+    id
+    name
+    email
+  }
+}
+
+
+# ─── 3. Create a post ─────────────────────────────────────────────────────────
+
+mutation CreatePost {
+  createPost(input: {
+    title: "My First GraphQL Post"
+    content: "GraphQL mutations are really cool..."
+    authorId: "1"
+    status: DRAFT
+  }) {
+    id
+    title
+    status
+    author {
+      name
+    }
+    createdAt
+  }
+}
+
+
+# ─── 4. Update a post — partial update ───────────────────────────────────────
+#
+# Only the fields you include get updated.
+# Variables panel:
+# { "id": "2", "input": { "title": "Updated Title", "status": "PUBLISHED" } }
+
+mutation UpdatePost($id: ID!, $input: UpdatePostInput!) {
+  updatePost(id: $id, input: $input) {
+    id
+    title
+    status
+    updatedAt
+  }
+}
+
+
+# ─── 5. Publish a post ────────────────────────────────────────────────────────
+
+mutation PublishPost {
+  publishPost(id: "2") {
+    id
+    title
+    status
+    updatedAt
+  }
+}
+
+
+# ─── 6. Delete a post ────────────────────────────────────────────────────────
+
+mutation DeletePost {
+  deletePost(id: "2")
+}
+
+
+# ─── 7. Try to create a duplicate user — see the error ───────────────────────
+#
+# Run CreateUser (mutation 1) first, then run this.
+# You should get: "A user with this email already exists"
+
+mutation TryDuplicateUser {
+  createUser(input: {
+    name: "Duplicate"
+    email: "zara@example.com"
+  }) {
+    id
+    name
+  }
+}
+
+
+# ─── 8. Try to delete a non-existent post — see the error ─────────────────────
+
+mutation DeleteNonExistent {
+  deletePost(id: "999")
+}

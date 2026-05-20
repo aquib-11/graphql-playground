@@ -1,0 +1,156 @@
+# queries.graphql — Example Queries
+#
+# Paste these one at a time into Apollo Sandbox at http://localhost:4000/graphql
+# Run the server first: npm run dev (in the examples/ folder)
+#
+# Each query is labelled — copy the whole block including the `query` keyword
+
+
+# ─── 1. Basic query ───────────────────────────────────────────────────────────
+
+query BasicHello {
+  hello
+}
+
+
+# ─── 2. Fetch a single user ───────────────────────────────────────────────────
+
+query GetUser {
+  user(id: "1") {
+    id
+    name
+    email
+    role
+  }
+}
+
+
+# ─── 3. Fetch all users ───────────────────────────────────────────────────────
+
+query GetAllUsers {
+  users {
+    id
+    name
+    email
+    role
+  }
+}
+
+
+# ─── 4. Nested query — user with their posts ─────────────────────────────────
+
+query GetUserWithPosts {
+  user(id: "1") {
+    name
+    posts {
+      id
+      title
+      status
+    }
+  }
+}
+
+
+# ─── 5. Deeply nested — post with author and comments ────────────────────────
+
+query GetPostWithEverything {
+  post(id: "1") {
+    title
+    content
+    status
+    author {
+      name
+      email
+    }
+    comments {
+      text
+      author {
+        name
+      }
+    }
+  }
+}
+
+
+# ─── 6. Using variables ───────────────────────────────────────────────────────
+#
+# Paste this query, then in the Variables panel paste:
+# { "userId": "2" }
+
+query GetUserById($userId: ID!) {
+  user(id: $userId) {
+    id
+    name
+    email
+  }
+}
+
+
+# ─── 7. Variables with defaults ───────────────────────────────────────────────
+
+query GetPosts($limit: Int = 3) {
+  posts(limit: $limit) {
+    id
+    title
+    publishedAt
+  }
+}
+
+
+# ─── 8. Aliases — query the same field twice ─────────────────────────────────
+
+query GetTwoUsers {
+  firstUser: user(id: "1") {
+    name
+    email
+  }
+
+  secondUser: user(id: "2") {
+    name
+    email
+  }
+}
+
+
+# ─── 9. Fragments ─────────────────────────────────────────────────────────────
+
+fragment UserBasic on User {
+  id
+  name
+  email
+}
+
+query GetUsersWithFragment {
+  user(id: "1") {
+    ...UserBasic
+    role
+  }
+}
+
+
+# ─── 10. Multiple root fields in one request ──────────────────────────────────
+
+query GetDashboardData {
+  users {
+    id
+    name
+  }
+  posts(limit: 2) {
+    id
+    title
+  }
+}
+
+
+# ─── 11. __typename meta-field ────────────────────────────────────────────────
+
+query CheckTypes {
+  user(id: "1") {
+    __typename
+    name
+  }
+  post(id: "1") {
+    __typename
+    title
+  }
+}

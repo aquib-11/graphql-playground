@@ -1,0 +1,271 @@
+# schema.graphql — Complete Blog Application Schema
+#
+# This is a real-world schema combining every type concept from the README.
+# Read the README first, then come back here to see it all together.
+#
+# This schema powers the Blog API project in 04-projects/01-blog-api/
+
+
+# ─── Scalars ──────────────────────────────────────────────────────────────────
+
+"""
+ISO 8601 date string — e.g. "2025-01-15T10:00:00Z"
+"""
+scalar Date
+
+
+# ─── Enums ────────────────────────────────────────────────────────────────────
+
+"""
+The lifecycle status of a blog post.
+Posts start as DRAFT, get PUBLISHED, and can be ARCHIVED.
+"""
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+"""
+The role of a user in the system.
+"""
+enum UserRole {
+  READER
+  AUTHOR
+  ADMIN
+}
+
+
+# ─── Object Types ─────────────────────────────────────────────────────────────
+
+"""
+A registered user of the blog platform.
+"""
+type User {
+  "Unique identifier"
+  id: ID!
+
+  "Display name — shown on posts and comments"
+  name: String!
+
+  "Email address — used for login"
+  email: String!
+
+  "User's role — controls what they can do"
+  role: UserRole!
+
+  "URL to the user's profile picture"
+  avatar: String
+
+  "Short bio displayed on the author page"
+  bio: String
+
+  "All posts written by this user"
+  posts: [Post!]!
+
+  "All comments made by this user"
+  comments: [Comment!]!
+
+  "When this account was created"
+  createdAt: Date!
+}
+
+"""
+A blog post written by an author.
+"""
+type Post {
+  "Unique identifier"
+  id: ID!
+
+  "The post title"
+  title: String!
+
+  "URL-friendly version of the title — e.g. 'getting-started-with-graphql'"
+  slug: String!
+
+  "Full markdown content of the post"
+  content: String!
+
+  "Short summary shown in listings"
+  excerpt: String
+
+  "The author who wrote this post"
+  author: User!
+
+  "Current publication status"
+  status: PostStatus!
+
+  "Tags for categorisation — e.g. ['graphql', 'api', 'tutorial']"
+  tags: [String!]!
+
+  "All comments on this post"
+  comments: [Comment!]!
+
+  "Total number of comments — more efficient than fetching all comments just to count"
+  commentCount: Int!
+
+  "When this post was created"
+  createdAt: Date!
+
+  "When this post was last updated"
+  updatedAt: Date!
+
+  "When this post was published (null if still a draft)"
+  publishedAt: Date
+}
+
+"""
+A comment left by a user on a post.
+"""
+type Comment {
+  "Unique identifier"
+  id: ID!
+
+  "The comment text"
+  text: String!
+
+  "The user who wrote this comment"
+  author: User!
+
+  "The post this comment belongs to"
+  post: Post!
+
+  "When this comment was created"
+  createdAt: Date!
+}
+
+"""
+Authentication response returned after login or register.
+"""
+type AuthPayload {
+  "JWT token — include in Authorization header for protected operations"
+  token: String!
+
+  "The authenticated user"
+  user: User!
+}
+
+
+# ─── Input Types ──────────────────────────────────────────────────────────────
+
+"""
+Input for registering a new user account.
+"""
+input RegisterInput {
+  name: String!
+  email: String!
+  password: String!
+}
+
+"""
+Input for creating a new post.
+"""
+input CreatePostInput {
+  title: String!
+  content: String!
+  excerpt: String
+  tags: [String!]
+  status: PostStatus
+}
+
+"""
+Input for updating an existing post.
+All fields are optional — only send what you want to change.
+"""
+input UpdatePostInput {
+  title: String
+  content: String
+  excerpt: String
+  tags: [String!]
+  status: PostStatus
+}
+
+"""
+Input for adding a comment to a post.
+"""
+input AddCommentInput {
+  postId: ID!
+  text: String!
+}
+
+
+# ─── Root Types ───────────────────────────────────────────────────────────────
+
+"""
+All read operations. Query is the entry point for fetching data.
+"""
+type Query {
+  # ── User queries ──────────────────────────────────────
+
+  "Get the currently authenticated user (requires auth token)"
+  me: User
+
+  "Get a user by their ID"
+  user(id: ID!): User
+
+  "Get all users"
+  users: [User!]!
+
+  # ── Post queries ──────────────────────────────────────
+
+  "Get a single post by its ID"
+  post(id: ID!): Post
+
+  "Get a single post by its URL slug"
+  postBySlug(slug: String!): Post
+
+  "Get all published posts — supports filtering and pagination"
+  posts(
+    "Filter by status (default: PUBLISHED)"
+    status: PostStatus
+
+    "Filter by tag"
+    tag: String
+
+    "Maximum number of posts to return"
+    limit: Int
+
+    "Number of posts to skip (for pagination)"
+    offset: Int
+  ): [Post!]!
+
+  # ── Comment queries ───────────────────────────────────
+
+  "Get all comments for a post"
+  comments(postId: ID!): [Comment!]!
+}
+
+"""
+All write operations. Mutations create, update, or delete data.
+"""
+type Mutation {
+  # ── Auth mutations ────────────────────────────────────
+
+  "Create a new user account"
+  register(input: RegisterInput!): AuthPayload!
+
+  "Log in with email and password"
+  login(email: String!, password: String!): AuthPayload!
+
+  # ── Post mutations ────────────────────────────────────
+
+  "Create a new post (requires auth)"
+  createPost(input: CreatePostInput!): Post!
+
+  "Update an existing post (requires auth — must be the author)"
+  updatePost(id: ID!, input: UpdatePostInput!): Post!
+
+  "Delete a post (requires auth — must be the author or admin)"
+  deletePost(id: ID!): Boolean!
+
+  "Publish a draft post (requires auth — must be the author)"
+  publishPost(id: ID!): Post!
+
+  # ── Comment mutations ─────────────────────────────────
+
+  "Add a comment to a post (requires auth)"
+  addComment(input: AddCommentInput!): Comment!
+
+  "Delete a comment (requires auth — must be the comment author or admin)"
+  deleteComment(id: ID!): Boolean!
+}
