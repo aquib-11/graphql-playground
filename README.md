@@ -2,14 +2,6 @@
 
     > A complete, hands-on learning path from GraphQL beginner to advanced — built topic by topic, explained clearly, with real working code at every step.
 
-    [![Node.js](https://img.shields.io/badge/Node.js-18+-339933?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org)
-    [![Apollo Server](https://img.shields.io/badge/Apollo_Server-v4-311C87?style=flat-square&logo=apollographql&logoColor=white)](https://www.apollographql.com/docs/apollo-server)
-    [![MongoDB](https://img.shields.io/badge/MongoDB-v6-47A248?style=flat-square&logo=mongodb&logoColor=white)](https://www.mongodb.com)
-    [![GraphQL](https://img.shields.io/badge/GraphQL-E10098?style=flat-square&logo=graphql&logoColor=white)](https://graphql.org)
-    [![License: MIT](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](./LICENSE)
-
-    > **Badges render on GitHub.** If you're reading this locally, push to GitHub and they'll appear as coloured images.
-
     ---
 
     ## What is this?
