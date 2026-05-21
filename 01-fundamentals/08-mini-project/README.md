@@ -1,5 +1,6 @@
 # Mini Project — Book Library API
-This is your first complete GraphQL project. It brings together everything from 01 fundamentals  — schema design, queries, mutations, resolvers — into one working application with a backend API and a React frontend.
+
+> This is your first complete GraphQL project. It brings together everything from Week 1 — schema design, queries, mutations, resolvers — into one working application with a backend API and a React frontend.
 
 ---
 

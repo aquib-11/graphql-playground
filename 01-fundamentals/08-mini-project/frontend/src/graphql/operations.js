@@ -1,14 +1,10 @@
 /**
  * operations.js — All GraphQL queries and mutations
- *
- * We keep all operations in one file so they're easy to find and reuse.
- * gql is a template literal tag from Apollo that parses the GraphQL string.
  */
 
-import { gql } from '@apollo/client'
+import { gql } from "@apollo/client";
 
-//  Fragment — reusable set of fields 
-// Used in multiple queries below to avoid repeating the same fields
+// ─── Fragments ────────────────────────────────────────────────────────────────
 
 export const BOOK_FIELDS = gql`
   fragment BookFields on Book {
@@ -22,9 +18,18 @@ export const BOOK_FIELDS = gql`
       name
     }
   }
-`
+`;
 
-// Queries 
+export const AUTHOR_FIELDS = gql`
+  fragment AuthorFields on Author {
+    id
+    name
+    bio
+    bookCount
+  }
+`;
+
+// ─── Book Queries ─────────────────────────────────────────────────────────────
 
 export const GET_BOOKS = gql`
   ${BOOK_FIELDS}
@@ -33,7 +38,7 @@ export const GET_BOOKS = gql`
       ...BookFields
     }
   }
-`
+`;
 
 export const GET_BOOK = gql`
   ${BOOK_FIELDS}
@@ -42,25 +47,26 @@ export const GET_BOOK = gql`
       ...BookFields
     }
   }
-`
+`;
+
+// ─── Author Queries ───────────────────────────────────────────────────────────
 
 export const GET_AUTHORS = gql`
+  ${AUTHOR_FIELDS}
   query GetAuthors {
     authors {
-      id
-      name
-      bio
-      bookCount
+      ...AuthorFields
       books {
         id
         title
         genre
+        year
       }
     }
   }
-`
+`;
 
-// Mutations 
+// ─── Book Mutations ───────────────────────────────────────────────────────────
 
 export const ADD_BOOK = gql`
   ${BOOK_FIELDS}
@@ -69,7 +75,7 @@ export const ADD_BOOK = gql`
       ...BookFields
     }
   }
-`
+`;
 
 export const UPDATE_BOOK = gql`
   ${BOOK_FIELDS}
@@ -78,20 +84,36 @@ export const UPDATE_BOOK = gql`
       ...BookFields
     }
   }
-`
+`;
 
 export const DELETE_BOOK = gql`
   mutation DeleteBook($id: ID!) {
     deleteBook(id: $id)
   }
-`
+`;
+
+// ─── Author Mutations ─────────────────────────────────────────────────────────
 
 export const ADD_AUTHOR = gql`
-  mutation AddAuthor($name: String!, $bio: String) {
-    addAuthor(name: $name, bio: $bio) {
-      id
-      name
-      bio
+  ${AUTHOR_FIELDS}
+  mutation AddAuthor($input: CreateAuthorInput!) {
+    addAuthor(input: $input) {
+      ...AuthorFields
     }
   }
-`
+`;
+
+export const UPDATE_AUTHOR = gql`
+  ${AUTHOR_FIELDS}
+  mutation UpdateAuthor($id: ID!, $input: UpdateAuthorInput!) {
+    updateAuthor(id: $id, input: $input) {
+      ...AuthorFields
+    }
+  }
+`;
+
+export const DELETE_AUTHOR = gql`
+  mutation DeleteAuthor($id: ID!) {
+    deleteAuthor(id: $id)
+  }
+`;

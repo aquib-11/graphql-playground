@@ -1,14 +1,10 @@
 /**
  * schema.js — Book Library API schema
- *
- * Covers: object types, enums, input types,
- *         non-null, lists, Query root, Mutation root
+ * Full CRUD for both Books and Authors
  */
 
-export const typeDefs = `
+export const typeDefs = `#graphql
 
-  #  Enum 
-  # Restricts genre to a fixed set of values
   enum Genre {
     FICTION
     NON_FICTION
@@ -18,14 +14,12 @@ export const typeDefs = `
     TECHNOLOGY
   }
 
-    # Object types 
-
   type Author {
     id: ID!
     name: String!
-    bio: String               # Optional — some authors don't have a bio
-    books: [Book!]!           # All books by this author (resolved from books array)
-    bookCount: Int!           # Computed — count without fetching all books
+    bio: String
+    books: [Book!]!
+    bookCount: Int!
   }
 
   type Book {
@@ -34,11 +28,10 @@ export const typeDefs = `
     isbn: String!
     genre: Genre!
     year: Int!
-    author: Author!           # Relational — resolved from authors array
+    author: Author!
   }
 
-  # Input types 
-  # Used for mutation arguments — cleaner than listing each field separately
+  # ── Input types ─────────────────────────────────────────────────────────────
 
   input CreateBookInput {
     title: String!
@@ -49,25 +42,41 @@ export const typeDefs = `
   }
 
   input UpdateBookInput {
-    title: String             # All fields optional — only send what's changing
+    title: String
     isbn: String
     genre: Genre
     year: Int
+    authorId: ID
   }
 
-  # Root types 
+  input CreateAuthorInput {
+    name: String!
+    bio: String
+  }
+
+  input UpdateAuthorInput {
+    name: String
+    bio: String
+  }
+
+  # ── Root types ───────────────────────────────────────────────────────────────
 
   type Query {
-    books(genre: Genre): [Book!]!     # Optional genre filter
-    book(id: ID!): Book               # Nullable — returns null if not found
+    books(genre: Genre): [Book!]!
+    book(id: ID!): Book
     authors: [Author!]!
     author(id: ID!): Author
   }
 
   type Mutation {
+    # Book CRUD
     addBook(input: CreateBookInput!): Book!
     updateBook(id: ID!, input: UpdateBookInput!): Book!
     deleteBook(id: ID!): Boolean!
-    addAuthor(name: String!, bio: String): Author!
+
+    # Author CRUD
+    addAuthor(input: CreateAuthorInput!): Author!
+    updateAuthor(id: ID!, input: UpdateAuthorInput!): Author!
+    deleteAuthor(id: ID!): Boolean!
   }
-`
+`;

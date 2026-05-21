@@ -1,6 +1,14 @@
     # GraphQL Journey 
 
-    > A complete, hands-on learning path from GraphQL beginner to advanced — built topic by topic, explained clearly, with real working code at every step.
+     A complete, hands-on learning path from GraphQL beginner to advanced — built topic by topic, explained clearly, with real working code at every step.
+
+    ---
+    ## Live Projects
+
+    | Project | Description | Live Demo |
+    |---|---|---|
+    | Book Library App | Apollo Client CRUD project | https://your-link.com |
+    | Future Project | Coming soon | — |
 
     ---
 

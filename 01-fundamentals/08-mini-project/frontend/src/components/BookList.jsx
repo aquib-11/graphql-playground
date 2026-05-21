@@ -1,105 +1,122 @@
 /**
- * BookList.jsx
+ * BookList.jsx — List all books with genre filter, edit, delete
  *
- * Demonstrates:
- *   - useQuery hook to fetch data
- *   - Variables for filtering (genre)
- *   - useMutation hook for delete
- *   - Loading and error states
- *   - Refetching after mutation
+ * Hooks used: useQuery, useMutation
  */
 
-import { useState } from 'react'
-import { useQuery, useMutation } from '@apollo/client'
-import { GET_BOOKS, DELETE_BOOK } from '../graphql/operations.js'
+import { useState } from "react";
+import { useQuery, useMutation } from "@apollo/client";
+import { GET_BOOKS, DELETE_BOOK } from "../graphql/operations.js";
+import { s, colors } from "../styles/common.js";
 
-const GENRES = ['', 'FICTION', 'NON_FICTION', 'SCIENCE', 'HISTORY', 'BIOGRAPHY', 'TECHNOLOGY']
+const GENRES = [
+  "",
+  "FICTION",
+  "NON_FICTION",
+  "SCIENCE",
+  "HISTORY",
+  "BIOGRAPHY",
+  "TECHNOLOGY",
+];
 
-const s = {
-  toolbar: { display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 },
-  label: { fontSize: 13, color: '#666' },
-  select: { padding: '6px 10px', borderRadius: 6, border: '1px solid #ddd', fontSize: 13, cursor: 'pointer' },
-  count: { fontSize: 13, color: '#999', marginLeft: 'auto' },
-  grid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 16 },
-  card: { background: '#fff', borderRadius: 10, padding: 20, boxShadow: '0 1px 4px rgba(0,0,0,0.08)', border: '1px solid #eee' },
-  genre: { fontSize: 11, fontWeight: 600, color: '#6c63ff', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 6 },
-  title: { fontSize: 16, fontWeight: 600, color: '#1a1a2e', marginBottom: 4 },
-  author: { fontSize: 13, color: '#555', marginBottom: 4 },
-  meta: { fontSize: 12, color: '#999', marginBottom: 12 },
-  isbn: { fontSize: 11, color: '#bbb', fontFamily: 'monospace' },
-  deleteBtn: { marginTop: 12, padding: '6px 12px', background: '#fff', border: '1px solid #fca5a5', color: '#dc2626', borderRadius: 6, cursor: 'pointer', fontSize: 12, width: '100%' },
-  loading: { textAlign: 'center', padding: 60, color: '#999' },
-  error: { background: '#fef2f2', border: '1px solid #fca5a5', color: '#dc2626', padding: 16, borderRadius: 8, fontSize: 14 },
-  empty: { textAlign: 'center', padding: 60, color: '#999' },
-}
+export default function BookList({ onEdit }) {
+  const [genre, setGenre] = useState("");
 
-export default function BookList() {
-  const [genre, setGenre] = useState('')
-
-  // useQuery — fetches books from the GraphQL server
-  // Re-runs automatically when `genre` variable changes
   const { data, loading, error } = useQuery(GET_BOOKS, {
     variables: genre ? { genre } : {},
-  })
+  });
 
-  // useMutation — runs the DELETE_BOOK mutation
-  // refetchQueries tells Apollo to re-run GET_BOOKS after deleting
-  const [deleteBook] = useMutation(DELETE_BOOK, {
+  const [deleteBook, { loading: deleting }] = useMutation(DELETE_BOOK, {
     refetchQueries: [{ query: GET_BOOKS, variables: genre ? { genre } : {} }],
-  })
+  });
 
   const handleDelete = async (id, title) => {
-    if (!window.confirm(`Delete "${title}"?`)) return
+    if (!window.confirm(`Delete "${title}"? This cannot be undone.`)) return;
     try {
-      await deleteBook({ variables: { id } })
+      await deleteBook({ variables: { id } });
     } catch (err) {
-      alert('Error: ' + err.message)
+      alert(err.graphQLErrors?.[0]?.message || err.message);
     }
-  }
+  };
 
-  if (loading) return <div style={s.loading}>Loading books...</div>
-  if (error)   return <div style={s.error}>Error: {error.message}</div>
+  if (loading) return <div style={s.loading}>Loading books…</div>;
+  if (error) return <div style={s.error}>Error: {error.message}</div>;
 
-  const books = data?.books || []
+  const books = data?.books || [];
 
   return (
     <div>
-      {/* Genre filter toolbar */}
+      {/* Toolbar */}
       <div style={s.toolbar}>
-        <span style={s.label}>Filter by genre:</span>
+        <span style={{ fontSize: 13, color: colors.textMuted }}>Filter:</span>
         <select
-          style={s.select}
+          style={{ ...s.select, width: "auto" }}
           value={genre}
-          onChange={e => setGenre(e.target.value)}
+          onChange={(e) => setGenre(e.target.value)}
         >
-          {GENRES.map(g => (
-            <option key={g} value={g}>{g || 'All genres'}</option>
+          {GENRES.map((g) => (
+            <option key={g} value={g}>
+              {g || "All genres"}
+            </option>
           ))}
         </select>
-        <span style={s.count}>{books.length} book{books.length !== 1 ? 's' : ''}</span>
+        <span
+          style={{ fontSize: 13, color: colors.textMuted, marginLeft: "auto" }}
+        >
+          {books.length} book{books.length !== 1 ? "s" : ""}
+        </span>
       </div>
 
       {books.length === 0 ? (
-        <div style={s.empty}>No books found{genre ? ` in ${genre}` : ''}.</div>
+        <div style={s.empty}>
+          No books found{genre ? ` in ${genre.replace("_", " ")}` : ""}.
+        </div>
       ) : (
         <div style={s.grid}>
-          {books.map(book => (
+          {books.map((book) => (
             <div key={book.id} style={s.card}>
-              <div style={s.genre}>{book.genre.replace('_', ' ')}</div>
-              <div style={s.title}>{book.title}</div>
-              <div style={s.author}>by {book.author.name}</div>
-              <div style={s.meta}>{book.year}</div>
-              <div style={s.isbn}>{book.isbn}</div>
-              <button
-                style={s.deleteBtn}
-                onClick={() => handleDelete(book.id, book.title)}
+              {/* Genre badge */}
+              <div style={{ marginBottom: 8 }}>
+                <span style={s.badge()}>{book.genre.replace("_", " ")}</span>
+              </div>
+
+              {/* Title & author */}
+              <div style={s.cardTitle}>{book.title}</div>
+              <div style={{ ...s.cardMeta, marginBottom: 4 }}>
+                by {book.author.name}
+              </div>
+              <div style={{ ...s.cardMeta, marginBottom: 12 }}>{book.year}</div>
+              <div
+                style={{
+                  fontFamily: "monospace",
+                  fontSize: 11,
+                  color: "#bbb",
+                  marginBottom: 16,
+                }}
               >
-                Delete
-              </button>
+                {book.isbn}
+              </div>
+
+              {/* Actions */}
+              <div style={{ display: "flex", gap: 8 }}>
+                <button
+                  style={{ ...s.btnSecondary, flex: 1 }}
+                  onClick={() => onEdit(book)}
+                >
+                  ✏️ Edit
+                </button>
+                <button
+                  style={{ ...s.btnDanger, flex: 1 }}
+                  onClick={() => handleDelete(book.id, book.title)}
+                  disabled={deleting}
+                >
+                  🗑 Delete
+                </button>
+              </div>
             </div>
           ))}
         </div>
       )}
     </div>
-  )
+  );
 }
