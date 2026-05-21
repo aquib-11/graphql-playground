@@ -21,7 +21,6 @@ export const typeDefs = `#graphql
     books: [Book!]!
     bookCount: Int!
   }
-
   type Book {
     id: ID!
     title: String!

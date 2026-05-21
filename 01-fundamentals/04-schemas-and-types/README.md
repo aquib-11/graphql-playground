@@ -1,6 +1,6 @@
 # Schemas & Types
 
-> The schema is the most important part of any GraphQL API. Everything — queries, mutations, resolvers — flows from it. This section gives you complete mastery of GraphQL's type system.
+The schema is the most important part of any GraphQL API. Everything — queries, mutations, resolvers — flows from it. This section gives you complete mastery of GraphQL's type system.
 
 ---
 
@@ -126,7 +126,7 @@ type Mutation {
   deletePost(id: ID!): Boolean!
 }
 
-# All real-time operations (Day 16)
+# All real-time operations 
 type Subscription {
   postCreated: Post!
 }
