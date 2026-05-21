@@ -6,14 +6,14 @@
 # Each query is labelled — copy the whole block including the `query` keyword
 
 
-# ─── 1. Basic query ───────────────────────────────────────────────────────────
+# 1. Basic query 
 
 query BasicHello {
   hello
 }
 
 
-# ─── 2. Fetch a single user ───────────────────────────────────────────────────
+# 2. Fetch a single user 
 
 query GetUser {
   user(id: "1") {
@@ -25,7 +25,7 @@ query GetUser {
 }
 
 
-# ─── 3. Fetch all users ───────────────────────────────────────────────────────
+# 3. Fetch all users 
 
 query GetAllUsers {
   users {
@@ -37,7 +37,7 @@ query GetAllUsers {
 }
 
 
-# ─── 4. Nested query — user with their posts ─────────────────────────────────
+# 4. Nested query — user with their posts 
 
 query GetUserWithPosts {
   user(id: "1") {
@@ -51,7 +51,7 @@ query GetUserWithPosts {
 }
 
 
-# ─── 5. Deeply nested — post with author and comments ────────────────────────
+# 5. Deeply nested — post with author and comments 
 
 query GetPostWithEverything {
   post(id: "1") {
@@ -72,7 +72,7 @@ query GetPostWithEverything {
 }
 
 
-# ─── 6. Using variables ───────────────────────────────────────────────────────
+# 6. Using variables 
 #
 # Paste this query, then in the Variables panel paste:
 # { "userId": "2" }
@@ -86,7 +86,7 @@ query GetUserById($userId: ID!) {
 }
 
 
-# ─── 7. Variables with defaults ───────────────────────────────────────────────
+#  7. Variables with defaults 
 
 query GetPosts($limit: Int = 3) {
   posts(limit: $limit) {
@@ -97,7 +97,7 @@ query GetPosts($limit: Int = 3) {
 }
 
 
-# ─── 8. Aliases — query the same field twice ─────────────────────────────────
+#  8. Aliases — query the same field twice 
 
 query GetTwoUsers {
   firstUser: user(id: "1") {
@@ -112,7 +112,7 @@ query GetTwoUsers {
 }
 
 
-# ─── 9. Fragments ─────────────────────────────────────────────────────────────
+# 9. Fragments 
 
 fragment UserBasic on User {
   id
@@ -128,7 +128,7 @@ query GetUsersWithFragment {
 }
 
 
-# ─── 10. Multiple root fields in one request ──────────────────────────────────
+#  10. Multiple root fields in one request 
 
 query GetDashboardData {
   users {
@@ -142,7 +142,7 @@ query GetDashboardData {
 }
 
 
-# ─── 11. __typename meta-field ────────────────────────────────────────────────
+# 11. __typename meta-field 
 
 query CheckTypes {
   user(id: "1") {

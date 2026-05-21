@@ -479,4 +479,4 @@ See `examples/schema.graphql` for a full blog application schema combining every
 
 ---
 
-➡️ Next: [Queries](../05-queries/)
+ Next: [Queries](../05-queries/)

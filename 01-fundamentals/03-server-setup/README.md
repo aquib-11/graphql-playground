@@ -1,6 +1,6 @@
 # GraphQL Server Setup
 
-> This is where the code starts. We'll build a real, running GraphQL server from scratch using Node.js, Express, and Apollo Server. By the end you'll have Apollo Sandbox running in your browser and your first query working.
+This is where the code starts. We'll build a real, running GraphQL server from scratch using Node.js, Express, and Apollo Server. By the end you'll have Apollo Sandbox running in your browser and your first query working.
 
 ---
 

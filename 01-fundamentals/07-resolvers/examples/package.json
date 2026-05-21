@@ -1,7 +1,7 @@
 {
-  "name": "06-mutations",
+  "name": "07-resolvers",
   "version": "1.0.0",
-  "description": "First GraphQL server — Node.js + Express + Apollo Server v4",
+  "description": "Resolvers deep dive — parent, args, context, computed fields",
   "type": "module",
   "scripts": {
     "dev": "nodemon server.js",

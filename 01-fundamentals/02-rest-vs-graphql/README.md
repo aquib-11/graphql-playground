@@ -1,6 +1,6 @@
 # REST vs GraphQL
 
-> This section does a real, honest comparison. Not "GraphQL always wins" — but a genuine look at what each approach does well, where each one struggles, and how to decide which to use.
+This section does a real, honest comparison. Not "GraphQL always wins" — but a genuine look at what each approach does well, where each one struggles, and how to decide which to use.
 
 ---
 

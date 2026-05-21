@@ -10,13 +10,13 @@
  */
 
 import { ApolloServer } from '@apollo/server'
-import { expressMiddleware } from '@apollo/server/express4'
+import { expressMiddleware } from "@as-integrations/express5";
 import { GraphQLError } from 'graphql'
 import express from 'express'
 import cors from 'cors'
 import bodyParser from 'body-parser'
 
-// ─── In-memory "database" ─────────────────────────────────────────────────────
+//  In-memory "database" 
 // We use a simple object so we can mutate it across requests.
 // On Day 10 this gets replaced with real MongoDB operations.
 
@@ -32,7 +32,7 @@ const db = {
   nextPostId: 2,
 }
 
-// ─── Schema ───────────────────────────────────────────────────────────────────
+//  Schema 
 
 const typeDefs = `#graphql
 
@@ -94,7 +94,7 @@ const typeDefs = `#graphql
   }
 `
 
-// ─── Resolvers ────────────────────────────────────────────────────────────────
+//  Resolvers 
 
 const resolvers = {
   Query: {
@@ -114,7 +114,7 @@ const resolvers = {
 
   Mutation: {
 
-    // ── CREATE USER ────────────────────────────────────────────────────────────
+    // CREATE USER 
     createUser: (_, args) => {
       const { input } = args
 
@@ -142,7 +142,7 @@ const resolvers = {
       return newUser
     },
 
-    // ── CREATE POST ────────────────────────────────────────────────────────────
+    // CREATE POST 
     createPost: (_, args) => {
       const { input } = args
 
@@ -164,12 +164,12 @@ const resolvers = {
         createdAt: now,
         updatedAt: now,
       }
-
+    
       db.posts.push(newPost)
       return newPost
     },
 
-    // ── UPDATE POST ────────────────────────────────────────────────────────────
+    // UPDATE POST 
     updatePost: (_, args) => {
       const { id, input } = args
 
@@ -197,7 +197,7 @@ const resolvers = {
       return updatedPost
     },
 
-    // ── DELETE POST ────────────────────────────────────────────────────────────
+    // DELETE POST 
     deletePost: (_, args) => {
       const { id } = args
 
@@ -215,7 +215,7 @@ const resolvers = {
       return true
     },
 
-    // ── PUBLISH POST ───────────────────────────────────────────────────────────
+    // PUBLISH POST 
     publishPost: (_, args) => {
       const postIndex = db.posts.findIndex(p => p.id === args.id)
       if (postIndex === -1) {
@@ -241,7 +241,7 @@ const resolvers = {
   },
 }
 
-// ─── Server ───────────────────────────────────────────────────────────────────
+// Server 
 
 const server = new ApolloServer({ typeDefs, resolvers })
 const app = express()
@@ -250,8 +250,8 @@ async function startServer() {
   await server.start()
   app.use('/graphql', cors(), bodyParser.json(), expressMiddleware(server))
   app.listen(4000, () => {
-    console.log('🚀 Mutations example server at http://localhost:4000/graphql')
-    console.log('📝 Data resets every server restart (in-memory storage)')
+    console.log('Mutations example server at http://localhost:4000/graphql')
+    console.log('Data resets every server restart (due to in-memory storage)')
   })
 }
 

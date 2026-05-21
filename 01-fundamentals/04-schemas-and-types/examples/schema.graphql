@@ -6,7 +6,7 @@
 # This schema powers the Blog API project in 04-projects/01-blog-api/
 
 
-# ─── Scalars ──────────────────────────────────────────────────────────────────
+# Scalars 
 
 """
 ISO 8601 date string — e.g. "2025-01-15T10:00:00Z"
@@ -14,7 +14,7 @@ ISO 8601 date string — e.g. "2025-01-15T10:00:00Z"
 scalar Date
 
 
-# ─── Enums ────────────────────────────────────────────────────────────────────
+#  Enums 
 
 """
 The lifecycle status of a blog post.
@@ -36,7 +36,7 @@ enum UserRole {
 }
 
 
-# ─── Object Types ─────────────────────────────────────────────────────────────
+#  Object Types 
 
 """
 A registered user of the blog platform.
@@ -146,7 +146,7 @@ type AuthPayload {
 }
 
 
-# ─── Input Types ──────────────────────────────────────────────────────────────
+# Input Types 
 
 """
 Input for registering a new user account.
@@ -189,13 +189,13 @@ input AddCommentInput {
 }
 
 
-# ─── Root Types ───────────────────────────────────────────────────────────────
+# Root Types 
 
 """
 All read operations. Query is the entry point for fetching data.
 """
 type Query {
-  # ── User queries ──────────────────────────────────────
+  # User queries 
 
   "Get the currently authenticated user (requires auth token)"
   me: User
@@ -206,7 +206,7 @@ type Query {
   "Get all users"
   users: [User!]!
 
-  # ── Post queries ──────────────────────────────────────
+  # Post queries 
 
   "Get a single post by its ID"
   post(id: ID!): Post
@@ -229,7 +229,7 @@ type Query {
     offset: Int
   ): [Post!]!
 
-  # ── Comment queries ───────────────────────────────────
+  #  Comment queries 
 
   "Get all comments for a post"
   comments(postId: ID!): [Comment!]!
@@ -239,7 +239,7 @@ type Query {
 All write operations. Mutations create, update, or delete data.
 """
 type Mutation {
-  # ── Auth mutations ────────────────────────────────────
+  # Auth mutations 
 
   "Create a new user account"
   register(input: RegisterInput!): AuthPayload!
@@ -247,7 +247,7 @@ type Mutation {
   "Log in with email and password"
   login(email: String!, password: String!): AuthPayload!
 
-  # ── Post mutations ────────────────────────────────────
+  # Post mutations 
 
   "Create a new post (requires auth)"
   createPost(input: CreatePostInput!): Post!
@@ -261,7 +261,7 @@ type Mutation {
   "Publish a draft post (requires auth — must be the author)"
   publishPost(id: ID!): Post!
 
-  # ── Comment mutations ─────────────────────────────────
+  # Comment mutations 
 
   "Add a comment to a post (requires auth)"
   addComment(input: AddCommentInput!): Comment!

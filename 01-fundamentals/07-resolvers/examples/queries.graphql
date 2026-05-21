@@ -1,0 +1,129 @@
+# queries.graphql — Resolvers example queries
+#
+# Paste these into Apollo Sandbox at http://localhost:4000/graphql
+# Run the server first: npm run dev
+
+
+# 1. Computed field — fullName is built in the resolver 
+# firstName and lastName are stored separately in DB
+# fullName doesn't exist in DB — the resolver combines them
+
+query ComputedFullName {
+  user(id: "1") {
+    firstName
+    lastName
+    fullName
+  }
+}
+
+
+#  2. Computed count — postCount without fetching all posts 
+
+query ComputedCount {
+  user(id: "1") {
+    fullName
+    postCount
+  }
+}
+
+
+# 3. Relational field — user with their posts 
+# posts field is resolved via User.posts field resolver
+# parent = the user object → filter posts where authorId matches
+
+query RelationalPosts {
+  user(id: "1") {
+    fullName
+    posts {
+      id
+      title
+      status
+    }
+  }
+}
+
+
+# 4. Resolver chain — post → author → fullName 
+# This shows the full resolver chain:
+#   Query.post → Post.author → User.fullName
+# Each resolver passes its result as `parent` to the next
+
+query ResolverChain {
+  post(id: "1") {
+    title
+    summary
+    commentCount
+    author {
+      fullName
+      role
+    }
+  }
+}
+
+
+# 5. Deeply nested chain 
+# post → comments → each comment's author → fullName
+
+query DeepChain {
+  post(id: "1") {
+    title
+    comments {
+      text
+      author {
+        fullName
+      }
+    }
+  }
+}
+
+
+# 6. Filter by status — args in action 
+
+query FilteredPosts {
+  posts(status: PUBLISHED) {
+    title
+    status
+    author {
+      fullName
+    }
+  }
+}
+
+
+# 7. me query — requires x-user-id header 
+# In Apollo Sandbox click "Headers" at the bottom and add:
+#   x-user-id: 1
+# Without the header you get an UNAUTHENTICATED error — that's correct behaviour
+
+query Me {
+  me {
+    fullName
+    role
+    postCount
+  }
+}
+
+
+# 8. Mutation — createPost 
+
+mutation CreatePost {
+  createPost(
+    title: "My New Post"
+    content: "This is the content of my new post written today."
+  ) {
+    id
+    title
+    summary
+    status
+    author {
+      fullName
+    }
+  }
+}
+
+
+# 9. Mutation — deletePost 
+
+mutation DeletePost {
+  deletePost(id: "3")
+}

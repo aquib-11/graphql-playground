@@ -58,8 +58,7 @@ const db = {
 //   }
 // }
 
-// ─── Resolvers — functions that fetch each piece of data ──────────────────────
-//
+// Resolvers — functions that fetch each piece of data //
 // Each resolver is responsible for ONE field.
 // GraphQL calls them automatically based on what the query asked for.
 
@@ -97,7 +96,7 @@ const resolvers = {
   },
 }
 
-// ─── Simulate GraphQL execution ───────────────────────────────────────────────
+// Simulate GraphQL execution 
 //
 // In real life, Apollo Server does all of this automatically.
 // This shows you the logic so you understand what's happening.

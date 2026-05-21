@@ -6,7 +6,7 @@
 # TIP: Run them in order — createUser first, then createPost, etc.
 
 
-# ─── 1. Create a user ─────────────────────────────────────────────────────────
+# 1. Create a user 
 
 mutation CreateUser {
   createUser(input: {
@@ -21,7 +21,7 @@ mutation CreateUser {
 }
 
 
-# ─── 2. Create a user with variables (better practice) ───────────────────────
+#  2. Create a user with variables (better practice) 
 #
 # Variables panel:
 # { "input": { "name": "Omar Farooq", "email": "omar@example.com" } }
@@ -35,7 +35,7 @@ mutation CreateUserWithVars($input: CreateUserInput!) {
 }
 
 
-# ─── 3. Create a post ─────────────────────────────────────────────────────────
+# 3. Create a post 
 
 mutation CreatePost {
   createPost(input: {
@@ -55,7 +55,7 @@ mutation CreatePost {
 }
 
 
-# ─── 4. Update a post — partial update ───────────────────────────────────────
+# 4. Update a post — partial update 
 #
 # Only the fields you include get updated.
 # Variables panel:
@@ -71,7 +71,7 @@ mutation UpdatePost($id: ID!, $input: UpdatePostInput!) {
 }
 
 
-# ─── 5. Publish a post ────────────────────────────────────────────────────────
+#  5. Publish a post 
 
 mutation PublishPost {
   publishPost(id: "2") {
@@ -83,14 +83,14 @@ mutation PublishPost {
 }
 
 
-# ─── 6. Delete a post ────────────────────────────────────────────────────────
+# 6. Delete a post 
 
 mutation DeletePost {
   deletePost(id: "2")
 }
 
 
-# ─── 7. Try to create a duplicate user — see the error ───────────────────────
+# 7. Try to create a duplicate user — see the error 
 #
 # Run CreateUser (mutation 1) first, then run this.
 # You should get: "A user with this email already exists"
@@ -106,7 +106,7 @@ mutation TryDuplicateUser {
 }
 
 
-# ─── 8. Try to delete a non-existent post — see the error ─────────────────────
+# 8. Try to delete a non-existent post — see the error 
 
 mutation DeleteNonExistent {
   deletePost(id: "999")
