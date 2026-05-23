@@ -31,14 +31,14 @@
     | Layer | Technology |
     |---|---|
     | Runtime | Node.js v18+ |
-    | HTTP framework | Express.js v4 |
-    | GraphQL server | Apollo Server v4 |
+    | HTTP framework | Express.js v5 |
+    | GraphQL server | Apollo Server v5 |
     | Database | MongoDB v6 |
     | ODM | Mongoose v8 |
     | Auth | JWT + bcryptjs |
     | Performance | DataLoader v2 |
     | Real-time | graphql-ws + WebSockets |
-    | Frontend (projects) | React v18 + Apollo Client v3 |
+    | Frontend (projects) | React v18 + Apollo Client v3 or + |
     | Build tool | Vite v5 |
 
     ---
@@ -130,13 +130,7 @@
 
     ---
 
-    ## Resources
 
-    - [GraphQL Cheatsheet](./resources/cheatsheet.md)
-    - [GraphQL Glossary](./resources/glossary.md)
-    - [Useful Links & Docs](./resources/links.md)
-
-    ---
 
     ## Contributing
 
