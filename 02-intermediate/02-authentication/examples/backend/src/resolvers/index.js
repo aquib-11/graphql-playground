@@ -17,10 +17,10 @@ import { requireAuth, requireRole, requireOwnerOrAdmin } from '../middleware/rol
 
 export const resolvers = {
 
-  // ── Query ────────────────────────────────────────────────────────────────────
+  // Query 
   Query: {
     // Public
-    hello: () => 'GraphQL Auth API is running 🔐',
+    hello: () => 'GraphQL Auth API is running ',
 
     // Protected — any authenticated user
     me: async (_, __, context) => {
@@ -52,10 +52,10 @@ export const resolvers = {
     },
   },
 
-  // ── Mutation ─────────────────────────────────────────────────────────────────
+  // Mutation 
   Mutation: {
 
-    // ── Public mutations ───────────────────────────────────────────────────────
+    // Public mutations 
     register: async (_, { input }) => {
       const { name, email, password } = input
 
@@ -94,7 +94,7 @@ export const resolvers = {
       return { token, user: safeUser }
     },
 
-    // ── Protected mutations ────────────────────────────────────────────────────
+    // Protected mutations 
     createPost: async (_, { input }, context) => {
       const user = requireAuth(context)
       return Post.create({ ...input, authorId: user._id })
@@ -132,7 +132,7 @@ export const resolvers = {
       return true
     },
 
-    // ── Admin only mutations ───────────────────────────────────────────────────
+    // Admin only mutations 
     deleteUser: async (_, { id }, context) => {
       requireRole('ADMIN', context)
 
@@ -147,7 +147,7 @@ export const resolvers = {
     },
   },
 
-  // ── Field resolvers ───────────────────────────────────────────────────────────
+  // Field resolvers 
   Post: {
     author: async (parent) => User.findById(parent.authorId).lean(),
   },

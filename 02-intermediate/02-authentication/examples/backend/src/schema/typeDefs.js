@@ -35,7 +35,7 @@ export const typeDefs = `#graphql
     user: User!
   }
 
-  # ── Inputs ──────────────────────────────────────────────────────────────────
+  # Inputs 
 
   input RegisterInput {
     name:     String!
@@ -53,7 +53,7 @@ export const typeDefs = `#graphql
     content: String
   }
 
-  # ── Queries ─────────────────────────────────────────────────────────────────
+  # Queries 
 
   type Query {
     "PUBLIC — health check"
@@ -72,7 +72,7 @@ export const typeDefs = `#graphql
     users: [User!]!
   }
 
-  # ── Mutations ────────────────────────────────────────────────────────────────
+  # Mutations 
 
   type Mutation {
     "PUBLIC — create a new account"
