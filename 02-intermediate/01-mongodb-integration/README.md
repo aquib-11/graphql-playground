@@ -163,4 +163,4 @@ See `exercises/exercises.md` for hands-on challenges.
 
 ---
 
-➡️ Next: [Authentication](../02-authentication/)
+Next: [Authentication](../02-authentication/)
