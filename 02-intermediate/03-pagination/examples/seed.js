@@ -24,10 +24,10 @@ const titles = {
 async function seed() {
   try {
     await mongoose.connect(process.env.MONGODB_URI)
-    console.log('✅ Connected')
+    console.log(' Connected')
 
     await Post.deleteMany()
-    console.log('🗑  Cleared existing posts')
+    console.log('  Cleared existing posts')
 
     const posts = []
     for (let i = 0; i < 50; i++) {
@@ -46,10 +46,10 @@ async function seed() {
       await Post.create(post)
     }
 
-    console.log('✅ Inserted 50 posts across 5 categories')
-    console.log('🚀 Run: npm run dev\n')
+    console.log(' Inserted 50 posts across 5 categories')
+    console.log(' Run: npm run dev\n')
   } catch (err) {
-    console.error('❌ Seed failed:', err.message)
+    console.error('Seed failed:', err.message)
   } finally {
     await mongoose.disconnect()
   }

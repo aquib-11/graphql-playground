@@ -61,8 +61,7 @@ export async function cursorPaginate(Model, filter = {}, options = {}) {
   const items = await Model
     .find(cursorFilter)
     .sort({ _id: -1 })        // newest first — consistent with _id ordering
-    .limit(first + 1)         // +1 to check hasNextPage
-    .lean()
+      .lean()
 
   const hasNextPage = items.length > first
   const nodes       = hasNextPage ? items.slice(0, first) : items
